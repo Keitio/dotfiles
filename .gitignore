@@ -3,3 +3,9 @@
 .config/*
 !.config/i3/
 !.config/i3/config
+!.config/polybar/
+!.config/polybar/config
+!code/
+code/*
+!code/randwall
+!code/pbarinfo
