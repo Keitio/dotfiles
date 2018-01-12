@@ -9,3 +9,6 @@
 code/*
 !code/randwall
 !code/pbarinfo
+!code/bash/
+!code/bash/*
+code/bash/*.sh

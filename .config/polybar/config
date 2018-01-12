@@ -166,7 +166,7 @@ format-underline = ${colors.my_color2}
 [module/musicinfo]
 type = custom/script
 
-exec = $HOME/Scripts/pbarinfo music
+exec = $HOME/code/bash/pbarinfo music
 interval = 1
 ;format-padding = 10
 ;format-foreground = ${colors.my_color2}
@@ -174,7 +174,7 @@ interval = 1
 [module/battery]
 type = custom/script
 
-exec = $HOME/Scripts/pbarinfo power
+exec = $HOME/code/bash/pbarinfo power
 
 format = <label>
 label = %output%
@@ -184,14 +184,14 @@ format-underline = ${colors.my_color3}
 
 [module/disk]
 type = custom/script
-exec = $HOME/Scripts/pbarinfo disk
+exec = $HOME/code/bash/pbarinfo disk
 interval = 10
 
 format-underline = ${colors.my_color4}
 
 [module/ram]
 type = custom/script
-exec = $HOME/Scripts/pbarinfo ram
+exec = $HOME/code/bash/pbarinfo ram
 interval = 1
 
 format-underline = ${colors.my_color6}

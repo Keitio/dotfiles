@@ -1,7 +1,24 @@
-#
+# i3wm themer
+set_from_resource	  $color15_i3wmthemer	    color15
+set_from_resource	  $color14_i3wmthemer	    color14
+set_from_resource	  $color13_i3wmthemer	    color13
+set_from_resource	  $color12_i3wmthemer	    color12
+set_from_resource	  $color11_i3wmthemer	    color11
+set_from_resource	  $color10_i3wmthemer	    color10
+set_from_resource	  $color09_i3wmthemer		  color9
+set_from_resource	  $color08_i3wmthemer		  color8
+set_from_resource	  $color07_i3wmthemer		  color7
+set_from_resource 	$color06_i3wmthemer		  color6
+set_from_resource 	$color05_i3wmthemer 	    color5
+set_from_resource 	$color04_i3wmthemer 	    color4
+set_from_resource 	$color03_i3wmthemer 	    color3
+set_from_resource 	$color02_i3wmthemer 	    color2
+set_from_resource 	$color01_i3wmthemer 	    color1
+set_from_resource	  $color00_i3wmthemer		  color0
+set_from_resource	  $foreground_i3wmthemer	foreground
+set_from_resource	  $background_i3wmthemer	background
 
-# General
-
+# Main
 set $mod Mod4
 floating_modifier $mod
 
@@ -41,6 +58,12 @@ gaps outer -10
 # Smart borders (draw borders around container only if it is not the only container on this workspace) 
 # on|no_gaps (on=always activate and no_gaps=only activate if the gap size to the edge of the screen is 0)
 smart_borders on
+
+# mouse settings 
+exec "xinput set-prop 11 287 1"
+exec "xinput set-prop 11 291 -1"
+exec "xinput set-prop 11 143 3 0 0 0 3 0 0 0 3"
+
 
 
 # Color palette used for the terminal ( ~/.extend.Xresources file )
@@ -100,78 +123,51 @@ client.placeholder      $foreground $background $foreground $color4     $color4
 client.background   $background
 
 
-# Start i3bar to display a workspace bar (plus the system information i3status if available)
+# Use polybar instead of i3bar
 
-bar {
-#    i3bar_command i3bar -t
-    status_command i3status
-    strip_workspace_numbers yes
-    position top
-    mode hide
-
-## please set your primary output first. Example: 'xrandr --output eDP1 --primary'
-#   tray_output primary
-#   tray_output eDP1
-
-    bindsym button4 nop
-    bindsym button5 nop
-    font xft:Noto Sans 10
-
-    colors {
-        background $i3_background
-        statusline $i3_color4
-        separator  $i3_color6
-
-#                           border          backgr.         text
-        focused_workspace   $i3_background  $i3_color4      $i3_text
-        active_workspace    $i3_color2      $i3_background  $i3_color5
-        inactive_workspace  $i3_background  $i3_background  $i3_color6
-        urgent_workspace    $i3_color4      $i3_color5      $i3_color7
-    }
-}
-
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 
 # Autostart applications
-exec --no-startup-id volumeicon
 exec --no-startup-id pulseaudio
-exec --no-startup-id pa-applet
+exec --no-startup-id pa-applet --disable-key-grabbing
 
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id nm-applet
 exec --no-startup-id xfce4-power-manager
-# exec --no-startup-id pamac-tray
+exec --no-startup-id blueman-applet
 exec --no-startup-id clipit
 # exec --no-startup-id xautolock -time 10 -locker blurlock
 exec_always --no-startup-id fix_xcursor
 
 # autows layout
-exec --no-startup-id i3-msg "workspace $ws1; append_layout /home/unclek/.i3/workspace1.json"
-exec --no-startup-id i3-msg "workspace $ws2; append_layout /home/unclek/.i3/workspace2.json"
-exec --no-startup-id i3-msg "workspace $ws3; append_layout /home/unclek/.i3/workspace3.json"
+exec --no-startup-id i3-msg "workspace $ws1; append_layout $HOME/.config/i3/ws1.json"
+exec --no-startup-id i3-msg "workspace $ws2; append_layout $HOME/.config/i3/ws2.json"
+exec --no-startup-id i3-msg "workspace $ws3; append_layout $HOME/.config/i3/ws3.json"
+#exec --no-startup-id i3-msg "workspace $ws9; append_layout $HOME/.config/i3/ws9.json"
 
-exec --no-startup-id exec compton
+exec --no-startup-id exec compton --respect-prop-shadow
 
 exec --no-startup-id exec $browser
 exec --no-startup-id exec subl
 exec --no-startup-id exec $term
-exec --no-startup-id /home/unclek/Scripts/changewall
+exec --no-startup-id $HOME/.fehbg
 
 
 # Workspace names
 # to display names or symbols instead of plain workspace numbers you can use
 # something like: set $ws1 1:mail
 #                 set $ws2 2:
-set $ws1  "1:"
-set $ws2  "2:"
-set $ws3  "3:"
-set $ws4  "4:4"
-set $ws5  "5:5"
-set $ws6  "6:6"
-set $ws7  "7:7"
-set $ws8  "8:"
-set $ws9  "9:9"
-set $ws10 "10:"
+set $ws1  "1"
+set $ws2  "2"
+set $ws3  "3"
+set $ws4  "4"
+set $ws5  "5"
+set $ws6  "6"
+set $ws7  "7"
+set $ws8  "8"
+set $ws9  "9"
+set $ws10 "10"
 
 #          
 
@@ -179,7 +175,17 @@ set $ws10 "10:"
 # assign [class="Thunderbird"] $ws1
 # assign [class="Pale moon"] $ws2
 # assign [class="Pcmanfm"] $ws3
-# assign [class="Skype"] $ws5
+assign [class="Firefox"] $ws1
+
+set $mode_music music
+
+mode "$mode_music" {
+    bindsym Left exec "playerctl previous"
+    bindsym Right exec "playerctl next"
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
 
 
 set $mode_system <caps_>(l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
@@ -200,7 +206,8 @@ mode "$mode_system" {
     bindsym Escape mode "default"
 }
 
-mode "resize" {
+set $mode_resize: resize
+mode "$mode_resize" {
         # These bindings trigger as soon as you enter the resize mode
         # Pressing left will shrink the window’s width.
         # Pressing right will grow the window’s width.
@@ -268,14 +275,16 @@ mode "$mode_config" {
         bindsym Escape mode "default"
 }
 
+set $mode_test: test
+mode "$mode_test" {
+        bindsym Return mode "default"
+        bindsym Escape mode "default"    
+}
+
+
 # BINDINGS
 
 bindsym $mod+c mode "$mode_config"
-
-# change borders
-bindsym $mod+u border none
-bindsym $mod+y border pixel 1
-bindsym $mod+n border normal
 
 # sound settings
 bindsym $mod+Ctrl+m exec pavucontrol
@@ -287,22 +296,25 @@ bindsym $mod+Return exec $term
 # kill focused window
 bindsym $mod+Shift+q kill
 
+# redefine F-keys
+bindsym F1 exec "false"
+
 # start program launchers
 bindsym $mod+d exec --no-startup-id dmenu_run
-bindsym $mod+space exec --no-startup-id rofi -show run -lines 5 -opacity "80"
+bindsym $mod+space exec --no-startup-id rofi -show run -lines 3 -columns 1 -opacity "80"
 
 # launch categorized menu
-bindsym $mod+z exec --no-startup-id morc_menu
+# bindsym $mod+z exec --no-startup-id morc_menu
 
 # change wallpaper
-bindsym $mod+b exec /home/unclek/Scripts/callwall
+bindsym $mod+b exec $HOME/Scripts/randwall
 
 # toggle touchpad on and off
-bindsym XF86TouchpadToggle exec --no-startup-id /home/unclek/Scripts/.touchpadtoggle
+bindsym XF86TouchpadToggle exec --no-startup-id $HOME/Scripts/.touchpadtoggle
 
 # Screen brightness controls
-# bindsym XF86MonBrightnessUp exec "xbacklight -inc 10; notify-send 'brightness up'"
-# bindsym XF86MonBrightnessDown exec "xbacklight -dec 10; notify-send 'brightness down'"
+bindsym XF86MonBrightnessUp exec "xbacklight -inc 10"
+bindsym XF86MonBrightnessDown exec "xbacklight -dec 10"
 
 # Start Applications
 bindsym $mod+Ctrl+b exec terminal -e 'bmenu'
@@ -339,19 +351,19 @@ bindsym $mod+q split toggle
 bindsym $mod+f fullscreen toggle
 
 # startup of the hidden terminal "metask"
-exec --no-startup-id urxvt -name metask
+#exec --no-startup-id urxvt -name metask
 # start it up if close the workspace (mod+q)
-bindsym $mod+SHIFT+o exec --no-startup-id urxvt -name metask
+#bindsym $mod+SHIFT+o exec --no-startup-id urxvt -name metask
 # the actual conf for the dropdown terminal size
-for_window [instance="metask"] move scratchpad
+#for_window [instance="metask"] move scratchpad
 
 # Show the next scratchpad window or hide the focused scratchpad window.
 # If there are multiple scratchpad windows, this command cycles through them.
 # Bind Escape keyboard key
-bindcode 9 scratchpad show
+#bindcode 9 scratchpad show
 
 # Bind misc. keys
-exec --no-startup-id xmodmap /home/unclek/Scripts/modmap
+exec --no-startup-id xmodmap $HOME/Scripts/modmap
 
 
 #navigate workspaces next / previous
@@ -393,15 +405,26 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 # Set shut down, restart and locking features
 # bindsym $mod+0 mode "$mode_system"
-bindcode 124 mode "$mode_system"
+bindcode 124 exec i3exit lock
+# bindcode 124 mode "$mode_system"
+bindcode 142 mode "$mode_test"
+bindcode 247 mode "$mode_test"
+# bindcode 116 mode "$mode_system"
+bindsym $mod+s mode "$mode_system"
 
 # Resize window (you can also use the mouse for that)
-bindsym $mod+r mode "resize"
+bindsym $mod+r mode "$mode_resize"
 
 bindsym $mod+Shift+g mode "$mode_gaps"
 
-# hide/unhide i3status bar
-bindsym $mod+m bar mode toggle
 
+# Music bindings
 
+bindsym $mod+p exec playerctl play-pause
+bindsym $mod+n exec playerctl next
+bindsym $mod+Shift+n exec playerctl previous
+bindsym $mod+m mode "$mode_music"
 
+# pa-applet does it better
+# bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume 0 +5%"
+# bindsym XF86AudioLowerVolume exec "pactl set-sink-volume 0 -5%"
