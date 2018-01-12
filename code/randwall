@@ -1,0 +1,6 @@
+#!/bin/bash
+pth=`shuf -n1 -e $HOME/Pictures/mono_backs/*/*`
+feh --bg-fill $pth
+killall convert
+
+betterlockscreen -u $pth 

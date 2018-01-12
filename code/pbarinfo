@@ -1,0 +1,35 @@
+#/bin/bash
+
+case "$1" in
+	power)
+		charging=`cat /sys/class/power_supply/AC0/online`
+		level=`cat /sys/class/power_supply/BAT0/capacity`
+
+		echo $([[ $charging = 1 ]] && echo '' || echo '') ${level}%
+		;;
+
+	music)
+		if [[ `playerctl status 2>/dev/null` = 'Playing' ]]; then
+			ret="[`playerctl metadata artist`] - `playerctl metadata title`"
+		else
+			ret="No song playing"
+		fi
+		echo ${ret:0:50}
+		;;
+
+	ram)
+		free | grep 'Mem' | awk '{printf "RAM %3.0f%%", $3/$2*100}'
+		;;
+
+	disk)
+		df -h | grep '/$' | awk '{printf " %s", $4}'
+		;;
+
+	test)
+		echo
+		;;
+
+	*)
+		echo "Invalid or missing input"
+		;;
+esac
