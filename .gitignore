@@ -1,9 +1,1 @@
 *
-!README.md
-!.gitignore
-
-!.extend.Xresources
-
-!.i3
-.i3/*
-!.i3/config
