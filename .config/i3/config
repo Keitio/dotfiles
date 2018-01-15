@@ -130,7 +130,7 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # Autostart applications
 exec --no-startup-id pulseaudio
-exec --no-startup-id pa-applet --disable-key-grabbing
+exec --no-startup-id pa-applet --disable-notifications
 
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id nm-applet
@@ -148,12 +148,12 @@ exec --no-startup-id i3-msg "workspace $ws3; append_layout $HOME/.config/i3/ws3.
 
 exec --no-startup-id exec compton --respect-prop-shadow
 
-exec --no-startup-id exec $browser
-exec --no-startup-id exec subl
-exec --no-startup-id exec $term
+exec --no-startup-id $browser
+exec --no-startup-id subl
+exec --no-startup-id $term
 exec --no-startup-id $HOME/.fehbg
 
-
+exec --no-startup-id "sudo mount --bind $HOME/Music /srv/mpd/music"
 # Workspace names
 # to display names or symbols instead of plain workspace numbers you can use
 # something like: set $ws1 1:mail
@@ -283,54 +283,90 @@ mode "$mode_test" {
 
 
 # BINDINGS
+exec --no-startup-id xmodmap $HOME/code/modmap
 
 bindsym $mod+c mode "$mode_config"
+bindsym $mod+Ctrl+m exec pavucontrol
+bindsym $mod+Return exec $term
+bindsym $mod+Shift+q kill
+bindsym $mod+d exec --no-startup-id dmenu_run
+bindsym $mod+space exec --no-startup-id rofi -show run -lines 3 -columns 1 -opacity "80"
+bindsym $mod+b exec $HOME/code/bash/randwall
+bindsym XF86TouchpadToggle exec --no-startup-id $HOME/code/bash/.touchpadtoggle
 
 # sound settings
-bindsym $mod+Ctrl+m exec pavucontrol
-#bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
 
 # start a terminal
-bindsym $mod+Return exec $term
 
 # kill focused window
-bindsym $mod+Shift+q kill
 
 # redefine F-keys
 bindsym F1 exec "false"
 
 # start program launchers
-bindsym $mod+d exec --no-startup-id dmenu_run
-bindsym $mod+space exec --no-startup-id rofi -show run -lines 3 -columns 1 -opacity "80"
 
 # launch categorized menu
 # bindsym $mod+z exec --no-startup-id morc_menu
 
 # change wallpaper
-bindsym $mod+b exec $HOME/Scripts/randwall
 
 # toggle touchpad on and off
-bindsym XF86TouchpadToggle exec --no-startup-id $HOME/Scripts/.touchpadtoggle
 
 # Screen brightness controls
+# Start Applications
+
+# bindsym $mod+a
+# bindsym $mod+b
+# bindsym $mod+c
+bindsym $mod+Shift+c reload
+# bindsym $mod+d
+bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
+# bindsym $mod+e
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+f fullscreen toggle
+bindsym $mod+g split h
+bindsym $mod+Shift+g mode "$mode_gaps"
+# bindsym $mod+h
+# bindsym $mod+i
+# bindsym $mod+j
+# bindsym $mod+k
+# bindsym $mod+l
+bindsym $mod+m mode "$mode_music"
+bindsym $mod+n exec "mpc next; playerctl next"
+bindsym $mod+Shift+n exec "mpc prev; playerctl previous"
+# bindsym $mod+o
+bindsym $mod+p exec "mpc toggle || playerctl play-pause"
+bindsym $mod+q split toggle
+bindsym $mod+r mode "$mode_resize"
+bindsym $mod+Shift+r restart
+bindsym $mod+s mode "$mode_system"
+bindsym $mod+t exec --no-startup-id pkill compton
+bindsym $mod+Ctrl+t exec --no-startup-id compton -b
+# bindsym $mod+u
+bindsym $mod+v split v
+# bindsym $mod+w
+# bindsym $mod+x
+bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
+# bindsym $mod+y
+# bindsym $mod+z
+
+
 bindsym XF86MonBrightnessUp exec "xbacklight -inc 10"
 bindsym XF86MonBrightnessDown exec "xbacklight -dec 10"
 
-# Start Applications
-bindsym $mod+Ctrl+b exec terminal -e 'bmenu'
+bindsym Print exec --no-startup-id i3-scrot
+bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
+bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
+
 bindsym $mod+F2 exec $browser
 bindsym $mod+F3 exec $filemanager
 bindsym $mod+Shift+F3 exec gksu $filemanager
 bindsym $mod+F5 exec $music
-bindsym $mod+t exec --no-startup-id pkill compton
-bindsym $mod+Ctrl+t exec --no-startup-id compton -b
-bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
-bindsym Print exec --no-startup-id i3-scrot
-bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
-bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
-bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
-# change focus
+bindcode 124 exec i3exit lock
+bindcode 142 mode "$mode_test"
+bindcode 247 mode "$mode_test"
+
 bindsym $mod+Left  focus left
 bindsym $mod+Down  focus down
 bindsym $mod+Up    focus up
@@ -342,31 +378,7 @@ bindsym $mod+Shift+Down  move down
 bindsym $mod+Shift+Up    move up
 bindsym $mod+Shift+Right move right
 
-# split orientation
-bindsym $mod+g split h
-bindsym $mod+v split v
-bindsym $mod+q split toggle
-
-# toggle fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
-
-# startup of the hidden terminal "metask"
-#exec --no-startup-id urxvt -name metask
-# start it up if close the workspace (mod+q)
-#bindsym $mod+SHIFT+o exec --no-startup-id urxvt -name metask
-# the actual conf for the dropdown terminal size
-#for_window [instance="metask"] move scratchpad
-
-# Show the next scratchpad window or hide the focused scratchpad window.
-# If there are multiple scratchpad windows, this command cycles through them.
-# Bind Escape keyboard key
-#bindcode 9 scratchpad show
-
-# Bind misc. keys
-exec --no-startup-id xmodmap $HOME/Scripts/modmap
-
-
-#navigate workspaces next / previous
+# navigate workspaces next / previous
 bindsym $mod+Ctrl+Right workspace next
 bindsym $mod+Ctrl+Left workspace prev
 
@@ -393,38 +405,3 @@ bindcode $mod+Shift+16 move container to workspace $ws7;  workspace $ws7
 bindcode $mod+Shift+17 move container to workspace $ws8;  workspace $ws8
 bindcode $mod+Shift+18 move container to workspace $ws9;  workspace $ws9
 bindcode $mod+Shift+19 move container to workspace $ws10; workspace $ws10
-
-# reload the configuration file
-bindsym $mod+Shift+c reload
-
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
-
-# exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-
-# Set shut down, restart and locking features
-# bindsym $mod+0 mode "$mode_system"
-bindcode 124 exec i3exit lock
-# bindcode 124 mode "$mode_system"
-bindcode 142 mode "$mode_test"
-bindcode 247 mode "$mode_test"
-# bindcode 116 mode "$mode_system"
-bindsym $mod+s mode "$mode_system"
-
-# Resize window (you can also use the mouse for that)
-bindsym $mod+r mode "$mode_resize"
-
-bindsym $mod+Shift+g mode "$mode_gaps"
-
-
-# Music bindings
-
-bindsym $mod+p exec playerctl play-pause
-bindsym $mod+n exec playerctl next
-bindsym $mod+Shift+n exec playerctl previous
-bindsym $mod+m mode "$mode_music"
-
-# pa-applet does it better
-# bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume 0 +5%"
-# bindsym XF86AudioLowerVolume exec "pactl set-sink-volume 0 -5%"

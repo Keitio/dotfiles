@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 case "$1" in
 	power)
@@ -9,12 +9,25 @@ case "$1" in
 		;;
 
 	music)
-		if [[ `playerctl status 2>/dev/null` = 'Playing' ]]; then
-			ret="[`playerctl metadata artist`] - `playerctl metadata title`"
-		else
-			ret="No song playing"
+		maxlen="54";
+		if [ ! -e /tmp/pbarinfomusicscroll ]; then
+			echo '0' > /tmp/pbarinfomusicscroll;
 		fi
-		echo ${ret:0:50}
+		if [[ `mpc status | tail -n2 | head -n1 | awk '{print $1}'` = "[playing]" ]]; then
+			ret=`mpc current`
+		else if [[ `playerctl status 2>/dev/null` = 'Playing' ]]; then
+				ret="[`playerctl metadata artist`] - `playerctl metadata title`"
+			else
+				ret="No song playing"
+			fi
+		fi
+		scroll=`cat /tmp/pbarinfomusicscroll`
+		scrolllimit=$(( ${#ret}-maxlen+1 ))
+		(( scrolllimit < 1 )) && scrolllimit=1
+		echo $(( (scroll+1) % scrolllimit )) > /tmp/pbarinfomusicscroll;
+		# echo "0" > /tmp/pbarinfomusicscroll;
+		# echo $maxlen
+		echo "$maxlen $scroll $ret" | awk '{print substr($0, length($1)+length($2)+3+$2, $1)}'
 		;;
 
 	ram)
@@ -25,8 +38,10 @@ case "$1" in
 		df -h | grep '/$' | awk '{printf " %s", $4}'
 		;;
 
-	test)
-		echo
+	cpu)
+		watts=`cat /sys/class/power_supply/BAT0/power_now | awk '{printf "%04.1f", $1/1000000}'`W
+		temp=`cat /sys/class/thermal/thermal_zone0/temp | awk '{printf "%02.0f", $1/1000}'`°C
+		echo $watts $temp
 		;;
 
 	*)
