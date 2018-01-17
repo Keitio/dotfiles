@@ -1,5 +1,6 @@
 #!/bin/bash
 
+self="$HOME/code/bash/pbarinfo"
 case "$1" in
 	power)
 		charging=`cat /sys/class/power_supply/AC0/online`
@@ -42,6 +43,13 @@ case "$1" in
 		watts=`cat /sys/class/power_supply/BAT0/power_now | awk '{printf "%04.1f", $1/1000000}'`W
 		temp=`cat /sys/class/thermal/thermal_zone0/temp | awk '{printf "%02.0f", $1/1000}'`°C
 		echo $watts $temp
+		;;
+
+	all)
+		while true; do
+			echo "`$self cpu`  `$self disk`  `$self ram`  `$self power`";
+			sleep 1;
+		done
 		;;
 
 	*)
