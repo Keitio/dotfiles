@@ -1,132 +1,30 @@
-# i3wm themer
-set_from_resource	  $color15_i3wmthemer	    color15
-set_from_resource	  $color14_i3wmthemer	    color14
-set_from_resource	  $color13_i3wmthemer	    color13
-set_from_resource	  $color12_i3wmthemer	    color12
-set_from_resource	  $color11_i3wmthemer	    color11
-set_from_resource	  $color10_i3wmthemer	    color10
-set_from_resource	  $color09_i3wmthemer		  color9
-set_from_resource	  $color08_i3wmthemer		  color8
-set_from_resource	  $color07_i3wmthemer		  color7
-set_from_resource 	$color06_i3wmthemer		  color6
-set_from_resource 	$color05_i3wmthemer 	    color5
-set_from_resource 	$color04_i3wmthemer 	    color4
-set_from_resource 	$color03_i3wmthemer 	    color3
-set_from_resource 	$color02_i3wmthemer 	    color2
-set_from_resource 	$color01_i3wmthemer 	    color1
-set_from_resource	  $color00_i3wmthemer		  color0
-set_from_resource	  $foreground_i3wmthemer	foreground
-set_from_resource	  $background_i3wmthemer	background
-
-# Main
+# Set variables
 set $mod Mod4
+set $mod2 Mod1
 floating_modifier $mod
 
 set $term urxvt
 set $browser firefox-nightly
 #set $filemanager pcmanfm
 set $filemanager urxvt -e ranger
-set $music terminal -e 'mocp'
+# set $music <value>
 set $clock urxvt ++scrollBar -e tty-clock -c
 
-# Configure border style <normal|1pixel|pixel xx|none|pixel>
+# No window borders
 new_window none
 new_float none
-
-# Hide borders
 hide_edge_borders none
 
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
-font xft:Noto Sans 10
-
-# switch to workspace with urgent window automatically
-for_window [urgent=latest] focus
-
 # Set inner/outer gaps
+# Those values make it so there is no gaps at the screen borders
 gaps inner 10
 gaps outer -10
-
-# Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
-# gaps inner|outer current|all set|plus|minus <px>
-# gaps inner all set 10
-# gaps outer all plus 5
 
 # Smart gaps (gaps used if only more than one container on the workspace)
 # smart_gaps on
 
-# Smart borders (draw borders around container only if it is not the only container on this workspace) 
-# on|no_gaps (on=always activate and no_gaps=only activate if the gap size to the edge of the screen is 0)
-smart_borders on
-
-# mouse settings 
-exec "xinput set-prop 11 287 1"
-exec "xinput set-prop 11 291 -1"
-exec "xinput set-prop 11 143 3 0 0 0 3 0 0 0 3"
-
-
-
-# Color palette used for the terminal ( ~/.extend.Xresources file )
-# Colors are gathered based on the documentation:
-# https://i3wm.org/docs/userguide.html#xresources
-set_from_resource $term_background background
-set_from_resource $term_foreground foreground
-set_from_resource $term_color0     color0
-set_from_resource $term_color1     color1
-set_from_resource $term_color2     color2
-set_from_resource $term_color3     color3
-set_from_resource $term_color4     color4
-set_from_resource $term_color5     color5
-set_from_resource $term_color6     color6
-set_from_resource $term_color7     color7
-set_from_resource $term_color8     color8
-set_from_resource $term_color9     color9
-set_from_resource $term_color10    color10
-set_from_resource $term_color11    color11
-set_from_resource $term_color12    color12
-set_from_resource $term_color13    color13
-set_from_resource $term_color14    color14
-set_from_resource $term_color15    color15
-
-set_from_resource $i3_transparent         background
-set_from_resource $i3_background          background
-set_from_resource $i3_foreground          foreground
-set $i3_text                              #ffffff
-set $i3_separator                         #ffffff
-set_from_resource $i3_color1              color1
-set_from_resource $i3_color2              color2
-set_from_resource $i3_color3              color3
-set_from_resource $i3_color4              color4
-set_from_resource $i3_color5              color5
-set_from_resource $i3_color6              color6
-set_from_resource $i3_color7              color7
-set_from_resource $i3_color8              color8
-set_from_resource $i3_color9              color9
-set_from_resource $i3_color10             color10
-set_from_resource $i3_color11             color11
-set_from_resource $i3_color12             color12
-set_from_resource $i3_color13             color13
-set_from_resource $i3_color14             color14
-set_from_resource $i3_color15             color15
-set $i3_color16                           #ffffff
-set $i3_color17                           #0c0c0c
-
-# Theme colors
-# class                 border      backgr.     text        indic.      child_border
-
-client.focused          $foreground $background $foreground $color2     $color2 
-client.unfocused        $foreground $background $foreground $color4     $color4
-client.focused_inactive $foreground $background $foreground $color4     $color4
-client.urgent           $foreground $background $foreground $color4     $color4
-client.placeholder      $foreground $background $foreground $color4     $color4
-
-client.background   $background
-
-
 # Use polybar instead of i3bar
-
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-
 
 # Autostart applications
 exec --no-startup-id pulseaudio
@@ -137,14 +35,8 @@ exec --no-startup-id nm-applet
 exec --no-startup-id xfce4-power-manager
 exec --no-startup-id blueman-applet
 exec --no-startup-id clipit
-# exec --no-startup-id xautolock -time 10 -locker blurlock
 exec_always --no-startup-id fix_xcursor
 
-# autows layout
-exec --no-startup-id i3-msg "workspace $ws1; append_layout $HOME/.config/i3/ws1.json"
-exec --no-startup-id i3-msg "workspace $ws2; append_layout $HOME/.config/i3/ws2.json"
-exec --no-startup-id i3-msg "workspace $ws3; append_layout $HOME/.config/i3/ws3.json"
-#exec --no-startup-id i3-msg "workspace $ws9; append_layout $HOME/.config/i3/ws9.json"
 
 exec --no-startup-id exec compton --respect-prop-shadow
 
@@ -154,10 +46,15 @@ exec --no-startup-id $term
 exec --no-startup-id $HOME/.fehbg
 
 exec --no-startup-id "sudo mount --bind $HOME/Music /srv/mpd/music"
+
+# Open apps on specific workspaces at startup
+# You'll probably want to edit those
+exec --no-startup-id i3-msg "workspace $ws1; append_layout $HOME/.config/i3/ws1.json"
+exec --no-startup-id i3-msg "workspace $ws2; append_layout $HOME/.config/i3/ws2.json"
+exec --no-startup-id i3-msg "workspace $ws3; append_layout $HOME/.config/i3/ws3.json"
+
 # Workspace names
-# to display names or symbols instead of plain workspace numbers you can use
-# something like: set $ws1 1:mail
-#                 set $ws2 2:
+
 set $ws1  "1"
 set $ws2  "2"
 set $ws3  "3"
@@ -169,29 +66,13 @@ set $ws8  "8"
 set $ws9  "9"
 set $ws10 "10"
 
-#          
-
 # Open applications on specific workspaces
-# assign [class="Thunderbird"] $ws1
-# assign [class="Pale moon"] $ws2
-# assign [class="Pcmanfm"] $ws3
-assign [class="Firefox"] $ws1
+assign [class="Nightly"] $ws1
+assign [class="Sublime_text"] $ws2
 
-set $mode_music music
-
-mode "$mode_music" {
-    bindsym Left exec "playerctl previous"
-    bindsym Right exec "playerctl next"
-
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
-
+# Set different modes
 set $mode_system <caps_>(l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
 mode "$mode_system" {
-    #Caps_Lock
-    bindsym Escape exec --no-startup-id i3exit lock, mode "default"
 
     bindsym l exec --no-startup-id i3exit lock, mode "default"
     bindsym s exec --no-startup-id i3exit suspend, mode "default"
@@ -201,32 +82,8 @@ mode "$mode_system" {
     bindsym r exec --no-startup-id i3exit reboot, mode "default"
     bindsym Shift+s exec --no-startup-id i3exit shutdown, mode "default"
 
-    # exit system mode: "Enter" or "Escape"
     bindsym Return mode "default"
     bindsym Escape mode "default"
-}
-
-set $mode_resize: resize
-mode "$mode_resize" {
-        # These bindings trigger as soon as you enter the resize mode
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym h resize shrink width   5 px or 5 ppt
-        bindsym j resize grow   height  5 px or 5 ppt
-        bindsym k resize shrink height  5 px or 5 ppt
-        bindsym l resize grow   width   5 px or 5 ppt
-
-        # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 1 px or 1 ppt
-        bindsym Down resize grow height 1 px or 1 ppt
-        bindsym Up resize shrink height 1 px or 1 ppt
-        bindsym Right resize grow width 1 px or 1 ppt
-
-        # exit resize mode: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
 }
 
 set $mode_gaps Gaps: (o) outer, (i) inner
@@ -275,51 +132,17 @@ mode "$mode_config" {
         bindsym Escape mode "default"
 }
 
-set $mode_test: test
-mode "$mode_test" {
-        bindsym Return mode "default"
-        bindsym Escape mode "default"    
-}
-
-
 # BINDINGS
 exec --no-startup-id xmodmap $HOME/code/modmap
 
-bindsym $mod+c mode "$mode_config"
-bindsym $mod+Ctrl+m exec pavucontrol
 bindsym $mod+Return exec $term
-bindsym $mod+Shift+q kill
-bindsym $mod+d exec --no-startup-id dmenu_run
 bindsym $mod+space exec --no-startup-id rofi -show run -lines 3 -columns 1 -opacity "80"
-bindsym $mod+b exec $HOME/code/bash/randwall
-bindsym XF86TouchpadToggle exec --no-startup-id $HOME/code/bash/.touchpadtoggle
-
-# sound settings
-
-# start a terminal
-
-# kill focused window
-
-# redefine F-keys
-bindsym F1 exec "false"
-
-# start program launchers
-
-# launch categorized menu
-# bindsym $mod+z exec --no-startup-id morc_menu
-
-# change wallpaper
-
-# toggle touchpad on and off
-
-# Screen brightness controls
-# Start Applications
 
 # bindsym $mod+a
-# bindsym $mod+b
-# bindsym $mod+c
+bindsym $mod+b exec $HOME/code/bash/randwall
+bindsym $mod+c mode "$mode_config"
 bindsym $mod+Shift+c reload
-# bindsym $mod+d
+bindsym $mod+d exec --no-startup-id dmenu_run
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
 # bindsym $mod+e
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
@@ -331,12 +154,14 @@ bindsym $mod+Shift+g mode "$mode_gaps"
 # bindsym $mod+j
 # bindsym $mod+k
 # bindsym $mod+l
-bindsym $mod+m mode "$mode_music"
+# bindsym $mod+m
+bindsym $mod+Ctrl+m exec pavucontrol
 bindsym $mod+n exec "mpc next; playerctl next"
 bindsym $mod+Shift+n exec "mpc prev; playerctl previous"
 # bindsym $mod+o
 bindsym $mod+p exec "mpc toggle || playerctl play-pause"
 bindsym $mod+q split toggle
+bindsym $mod+Shift+q kill
 bindsym $mod+r mode "$mode_resize"
 bindsym $mod+Shift+r restart
 bindsym $mod+s mode "$mode_system"
@@ -350,37 +175,43 @@ bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 # bindsym $mod+y
 # bindsym $mod+z
 
-
-bindsym XF86MonBrightnessUp exec "xbacklight -inc 10"
-bindsym XF86MonBrightnessDown exec "xbacklight -dec 10"
+# Bind misc keys
+bindsym XF86MonBrightnessUp     exec "xbacklight -inc 10"
+bindsym XF86MonBrightnessDown   exec "xbacklight -dec 10"
+bindsym XF86TouchpadToggle      exec --no-startup-id $HOME/code/bash/.touchpadtoggle
 
 bindsym Print exec --no-startup-id i3-scrot
 bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
 bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
 
+bindsym F1 exec "false"
 bindsym $mod+F2 exec $browser
 bindsym $mod+F3 exec $filemanager
-bindsym $mod+Shift+F3 exec gksu $filemanager
-bindsym $mod+F5 exec $music
 
+# Bind power button (code may vary)
 bindcode 124 exec i3exit lock
-bindcode 142 mode "$mode_test"
-bindcode 247 mode "$mode_test"
 
+# Change window focus
 bindsym $mod+Left  focus left
 bindsym $mod+Down  focus down
 bindsym $mod+Up    focus up
 bindsym $mod+Right focus right
 
-# move focused window
+# Move focused window
 bindsym $mod+Shift+Left  move left
 bindsym $mod+Shift+Down  move down
 bindsym $mod+Shift+Up    move up
 bindsym $mod+Shift+Right move right
 
-# navigate workspaces next / previous
+# Navigate workspaces next / previous
 bindsym $mod+Ctrl+Right workspace next
-bindsym $mod+Ctrl+Left workspace prev
+bindsym $mod+Ctrl+Left  workspace prev
+
+# Resize window
+bindsym $mod+$mod2+Left   resize shrink   width   5 px or 5 ppt
+bindsym $mod+$mod2+Down   resize grow     height  5 px or 5 ppt
+bindsym $mod+$mod2+Up     resize shrink   height  5 px or 5 ppt
+bindsym $mod+$mod2+Right  resize grow     width   5 px or 5 ppt
 
 # switch to workspace
 bindcode $mod+10 workspace $ws1
