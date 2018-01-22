@@ -13,7 +13,6 @@ set $clock urxvt ++scrollBar -e tty-clock -c
 # No window borders
 new_window none
 new_float none
-hide_edge_borders none
 
 # Set inner/outer gaps
 # Those values make it so there is no gaps at the screen borders
