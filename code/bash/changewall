@@ -1,6 +1,0 @@
-#!/bin/sh
-while true
-do
- /home/unclek/Scripts/gifwall /home/unclek/Pictures/gif/`ls /home/unclek/Pictures/gif/ | shuf | head -n 1`
- sleep 600
-done

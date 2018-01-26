@@ -22,8 +22,6 @@ gaps outer -10
 # Smart gaps (gaps used if only more than one container on the workspace)
 # smart_gaps on
 
-# Use polybar instead of i3bar
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # Autostart applications
 exec --no-startup-id pulseaudio
@@ -51,6 +49,9 @@ exec --no-startup-id "sudo mount --bind $HOME/Music /srv/mpd/music"
 exec --no-startup-id i3-msg "workspace $ws1; append_layout $HOME/.config/i3/ws1.json"
 exec --no-startup-id i3-msg "workspace $ws2; append_layout $HOME/.config/i3/ws2.json"
 exec --no-startup-id i3-msg "workspace $ws3; append_layout $HOME/.config/i3/ws3.json"
+
+# Use polybar instead of i3bar
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # Workspace names
 
@@ -138,7 +139,8 @@ bindsym $mod+Return exec $term
 bindsym $mod+space exec --no-startup-id rofi -show run -lines 3 -columns 1 -opacity "80"
 
 # bindsym $mod+a
-bindsym $mod+b exec $HOME/code/bash/randwall
+bindsym $mod+b exec bgctl next
+bindsym $mod+Shift+b exec bgctl previous
 bindsym $mod+c mode "$mode_config"
 bindsym $mod+Shift+c reload
 bindsym $mod+d exec --no-startup-id dmenu_run

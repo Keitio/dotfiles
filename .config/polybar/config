@@ -9,6 +9,7 @@
 [colors]
 
 my_background	= ${xrdb:background}
+;my_background	= "#000000"
 my_foreground	= ${xrdb:foreground}
 my_color0		= ${xrdb:color0}
 my_color1		= ${xrdb:color1}

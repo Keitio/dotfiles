@@ -7,8 +7,7 @@
 !.config/polybar/config
 !code/
 code/*
-!code/randwall
-!code/pbarinfo
 !code/bash/
-!code/bash/*
+!code/bash/bgctl
+!code/bash/pbarinfo
 code/bash/*.sh

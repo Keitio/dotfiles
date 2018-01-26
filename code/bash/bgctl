@@ -1,0 +1,171 @@
+#!/usr/bin/env bash
+folder="$HOME/code/bash/bgctl.d"
+
+store="$folder/bgstore"
+storedata="$folder/bgstoredata"
+wall=""
+
+getwalln() {
+    wall=$(cat $store | cut -d"
+" -f$(cat $storedata))
+}
+
+updatewall() {
+    feh --bg-fill $wall
+    killall convert &>/dev/null
+    betterlockscreen -u $wall
+}
+
+addbg() {
+    echo `realpath $@` >>$store
+}
+
+gethelp() {
+    echo "usage: bgctl <command>"
+    echo
+    echo "This program is meant to be used to manage your wallpapers."
+    echo "A list of wallpapers is used internally, and most commands use it."
+    echo "Internally it uses feh to set wallpaper and wget to get wallpapers."
+    echo
+    echo "List of available commands:"
+    echo
+    echo "help"
+    echo "    shows this help"
+    echo
+    echo "clear"
+    echo "    clears the wallpaper list"
+    echo
+    echo "list"
+    echo "    shows the wallpaper list"
+    echo "    to use your favorite pager, just pipe it from here"
+    echo
+    echo "add IMAGES..."
+    echo "    adds all files found in the IMAGES arguments"
+    echo "    if IMAGES contains directories, their content are recursively added"
+    echo
+    echo "shuffle"
+    echo "    reorders the wallpapers list in a random manner"
+    echo
+    echo "random"
+    echo "    sets a random wallpaper from the list"
+    echo
+    echo "prev, previous"
+    echo "    sets the previous wallpaper from the list as current"
+    echo
+    echo "next"
+    echo "    sets the next wallpaper from the list as current"
+    echo
+    echo "set INDEX"
+    echo "    sets the wallpaper at index INDEX from the list as current"
+    echo "    indices start at 1 because of how cut works"
+    echo
+    echo "fetch [URL]"
+    echo "    sets the wallpaper found at URL as current"
+    echo "    if no URL is provided, uses a random image from unsplash instead"
+    echo
+    exit 0
+}
+
+noArgs() {
+    echo "No arguments provided, see 'bgctl help'."
+    exit 1
+}
+
+badArgs() {
+    echo "$1 is a unknown command, see 'bgctl help'."
+    exit 1
+}
+
+case "$@" in
+    "")
+        noArgs;
+        ;;
+esac
+
+case "$1" in
+    help)
+        gethelp;
+        ;;
+
+    list)
+        cat $store
+        ;;
+
+    clear)
+        false &>$store
+        ;;
+
+    add)
+        shift
+        while (( $# > 0 )); do
+            if [[ -d "$1" ]]; then
+                while read -r file; do
+                    addbg "${file}"
+                done <<< $(find "$1" -type f | sort)
+            elif [[ -f "$1" ]]; then
+                addbg "$1"
+            fi
+
+            shift
+        done
+        # addbg "$@"
+        ;;
+
+    shuffle)
+        shuf $store >${store}.tmp && rm $store && mv ${store}.tmp $store
+        ;;
+
+    random)
+        wall=$(shuf -n1 $store)
+        updatewall
+        ;;
+
+    next)
+        echo $(cat $storedata)
+        nbr=$(echo $(cat $storedata)+1 | bc)
+        wallsnb=$(cat $store | wc -l)
+        # notify-send $nbr $wallsnb
+        if [[ $nbr -gt $wallsnb ]]; then
+            notify-send "No more wallpapers, wrapping to the start."
+            nbr=1
+        fi
+        echo $nbr
+        echo $nbr >${storedata}
+        echo $(cat $storedata)
+        getwalln;
+        updatewall
+        ;;
+
+    prev|previous)
+        nbr=$(echo $(cat $storedata)-1 | bc)
+        wallsnb=$(cat $store | wc -l)
+        if [[ $nbr<1 ]]; then
+            notify-send "No more wallpapers, wrapping to the end."
+            nbr=$wallsnb
+        fi
+        echo $nbr >${storedata}
+        getwalln
+        updatewall;
+        ;;
+
+    set)
+        echo $2 >$storedata
+        getwalln
+        updatewall
+        ;;
+
+    fetch)
+        if [[ -z $2 ]]; then
+            fetchpath="https://source.unsplash.com/random"
+        else
+            fetchpath=$2
+        fi
+        wget -O - $fetchpath >$folder/random
+        wall=$folder/random
+        updatewall
+        ;;
+
+    *)
+        badArgs $1;
+        ;;
+esac
