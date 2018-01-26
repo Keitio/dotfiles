@@ -59,7 +59,7 @@ font-0 = Hack:fontformat=truetype:size=9;1
 font-1 = Hack:fontformat=truetype:size=9;1
 font-2 = FontAwesome:fontformat=truetype:size=9;1
 
-modules-left = i3 github
+modules-left = i3
 ;modules-center = musicinfo
 modules-center = xwindow
 modules-right = temp disk ram cpu battery date
