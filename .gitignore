@@ -1,4 +1,7 @@
 *
+!.bashrc
+!.Xresources
+!.extend.Xresources
 !.config/
 .config/*
 !.config/i3/
