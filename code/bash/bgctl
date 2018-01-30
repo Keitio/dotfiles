@@ -13,11 +13,16 @@ getwalln() {
 updatewall() {
     feh --bg-fill $wall
     killall convert &>/dev/null
-    betterlockscreen -u $wall
+    lock -u $wall
 }
 
 addbg() {
     echo `realpath $@` >>$store
+}
+
+uniquebg() {
+    tmp=`mktemp`
+    cat $store | awk '!x[$0]++' >$tmp && cat $tmp > $store
 }
 
 gethelp() {
@@ -42,6 +47,7 @@ gethelp() {
     echo "add IMAGES..."
     echo "    adds all files found in the IMAGES arguments"
     echo "    if IMAGES contains directories, their content are recursively added"
+    echo "    At the end of adding , duplicates are removed (this may take some time)"
     echo
     echo "shuffle"
     echo "    reorders the wallpapers list in a random manner"
@@ -108,6 +114,7 @@ case "$1" in
 
             shift
         done
+        uniquebg
         # addbg "$@"
         ;;
 
@@ -166,6 +173,6 @@ case "$1" in
         ;;
 
     *)
-        badArgs $1;
+        badArgs "$@";
         ;;
 esac
