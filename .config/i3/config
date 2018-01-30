@@ -3,7 +3,7 @@ set $mod Mod4
 set $mod2 Mod1
 floating_modifier $mod
 
-set $term urxvt
+set $term st
 set $browser firefox-nightly
 #set $filemanager pcmanfm
 set $filemanager urxvt -e ranger
@@ -35,7 +35,7 @@ exec --no-startup-id clipit
 exec_always --no-startup-id fix_xcursor
 
 
-exec --no-startup-id exec compton --respect-prop-shadow
+exec --no-startup-id exec compton --respect-prop-shadow --xrender-sync-fence
 
 exec --no-startup-id $browser
 exec --no-startup-id subl
@@ -70,68 +70,6 @@ set $ws10 "10"
 assign [class="Nightly"] $ws1
 assign [class="Sublime_text"] $ws2
 
-# Set different modes
-set $mode_system <caps_>(l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
-mode "$mode_system" {
-
-    bindsym l exec --no-startup-id i3exit lock, mode "default"
-    bindsym s exec --no-startup-id i3exit suspend, mode "default"
-    bindsym u exec --no-startup-id i3exit switch_user, mode "default"
-    bindsym e exec --no-startup-id i3exit logout, mode "default"
-    bindsym h exec --no-startup-id i3exit hibernate, mode "default"
-    bindsym r exec --no-startup-id i3exit reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id i3exit shutdown, mode "default"
-
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
-set $mode_gaps Gaps: (o) outer, (i) inner
-mode "$mode_gaps" {
-        bindsym o      mode "$mode_gaps_outer"
-        bindsym i      mode "$mode_gaps_inner"
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
-set $mode_gaps_inner Inner Gaps: (p)lus (m)inus (d)efault (Shift for global)
-mode "$mode_gaps_inner" {
-        bindsym p   gaps inner current plus 5
-        bindsym m   gaps inner current minus 5
-        bindsym d   gaps inner current set 0
-
-        bindsym Shift+p   gaps inner all plus 5
-        bindsym Shift+m   gaps inner all minus 5
-        bindsym Shift+d   gaps inner all set 0
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
-set $mode_gaps_outer Outer Gaps: (p)lus (m)inus (d)efault (Shift for global)
-mode "$mode_gaps_outer" {
-        bindsym p   gaps outer current plus 5
-        bindsym m   gaps outer current minus 5
-        bindsym d   gaps outer current set 0
-
-        bindsym Shift+p   gaps outer all plus 5
-        bindsym Shift+m   gaps outer all minus 5
-        bindsym Shift+d   gaps outer all set 0
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
-set $mode_config Settings: (g)aps (p)ower (r)esize
-mode "$mode_config" {
-        bindsym g mode "$mode_gaps"
-        bindsym p mode "$mode_system"
-        bindsym r mode "resize"
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
 # BINDINGS
 exec --no-startup-id xmodmap $HOME/code/modmap
 
@@ -141,7 +79,7 @@ bindsym $mod+space exec --no-startup-id rofi -show run -lines 3 -columns 1 -opac
 # bindsym $mod+a
 bindsym $mod+b exec bgctl next
 bindsym $mod+Shift+b exec bgctl previous
-bindsym $mod+c mode "$mode_config"
+# bindsym $mod+c
 bindsym $mod+Shift+c reload
 bindsym $mod+d exec --no-startup-id dmenu_run
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
@@ -149,7 +87,6 @@ bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart du
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 bindsym $mod+f fullscreen toggle
 bindsym $mod+g split h
-bindsym $mod+Shift+g mode "$mode_gaps"
 # bindsym $mod+h
 # bindsym $mod+i
 # bindsym $mod+j
@@ -163,9 +100,9 @@ bindsym $mod+Shift+n exec "mpc prev; playerctl previous"
 bindsym $mod+p exec "mpc toggle || playerctl play-pause"
 bindsym $mod+q split toggle
 bindsym $mod+Shift+q kill
-bindsym $mod+r mode "$mode_resize"
+# bindsym $mod+r
 bindsym $mod+Shift+r restart
-bindsym $mod+s mode "$mode_system"
+# bindsym $mod+s
 bindsym $mod+t exec --no-startup-id pkill compton
 bindsym $mod+Ctrl+t exec --no-startup-id compton -b
 # bindsym $mod+u
